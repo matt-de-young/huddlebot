@@ -13,7 +13,25 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/lib/auth';
 import { signOut } from '@/app/(login)/actions';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+
+function AppButton() {
+  const { userPromise } = useUser();
+  const user = use(userPromise);
+  const pathname = usePathname();
+
+  if (!user || pathname.includes('/app')) {
+    return <></>;
+  }
+
+  return (
+    <Button asChild variant="outline">
+      <Link href="/app" className="flex items-center">
+        <span>App</span>
+      </Link>
+    </Button>
+  );
+}
 
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -61,7 +79,7 @@ function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="flex flex-col gap-1">
         <DropdownMenuItem className="cursor-pointer">
-          <Link href="/settings" className="flex w-full items-center">
+          <Link href="/app/settings" className="flex w-full items-center">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </Link>
@@ -87,8 +105,9 @@ function Header() {
           <CircleIcon className="h-6 w-6 text-orange-500" />
           <span className="ml-2 text-xl font-semibold text-gray-900">HuddleBot</span>
         </Link>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
           <Suspense fallback={<div className="h-9" />}>
+            <AppButton />
             <UserMenu />
           </Suspense>
         </div>
