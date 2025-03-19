@@ -18,7 +18,7 @@ export default async function SuccessPage() {
           <div className={'flex flex-col items-center text-white text-center'}>
             <Image
               className={'pb-12'}
-              src={'/assets/icons/logo/aeroedit-success-icon.svg'}
+              src={'/assets/icons/logo/this-success-icon.svg'}
               alt={'Success icon'}
               height={96}
               width={96}

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import { appConfig } from '@/constants/config';
 
 export const metadata: Metadata = {
-  title: 'AeroEdit - Error',
+  title: `${appConfig.title} - Error`,
 };
 
 export default function ErrorPage() {

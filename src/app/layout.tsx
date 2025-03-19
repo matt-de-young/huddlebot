@@ -4,14 +4,14 @@ import '../styles/layout.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
+import { appConfig } from '@/constants/config';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://paddle-billing.vercel.app'),
-  title: 'AeroEdit',
-  description:
-    'AeroEdit is a powerful team design collaboration app and image editor. With plans for businesses of all sizes, streamline your workflow with real-time collaboration, advanced editing tools, and seamless project management.',
+  title: appConfig.title,
+  description: `${appConfig.title} is designed to save time on your daily huddle or standup using AI to give an update so that you can stay in deep focus.`,
 };
 
 export default function RootLayout({

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { appConfig } from '@/constants/config';
 
 export function CheckoutHeader() {
   return (
@@ -11,7 +12,7 @@ export function CheckoutHeader() {
           <ChevronLeft />
         </Button>
       </Link>
-      <Image src={'/logo.svg'} alt={'AeroEdit'} width={131} height={28} />
+      <Image src={'/logo.svg'} alt={appConfig.title} width={131} height={28} />
     </div>
   );
 }
