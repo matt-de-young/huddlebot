@@ -1,8 +1,8 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
+import * as path from 'path';
 
-// For Vercel serverless environment
 async function runMigrations() {
   console.log('Running migrations...');
 
@@ -16,8 +16,12 @@ async function runMigrations() {
   const sql = postgres(connectionString, { max: 1 });
   const db = drizzle(sql);
 
+  // Update this path to match your actual migrations folder
+  const migrationsFolder = path.join(process.cwd(), 'lib/db/migrations');
+  console.log(`Using migrations folder: ${migrationsFolder}`);
+
   try {
-    await migrate(db, { migrationsFolder: 'drizzle' });
+    await migrate(db, { migrationsFolder });
     console.log('Migrations completed successfully');
   } catch (error) {
     console.error('Migration failed:', error);
