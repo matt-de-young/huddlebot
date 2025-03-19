@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getTeamForUser, getUser } from '@/lib/db/queries';
+import { Dashboard } from './dashboard';
 
 export default async function SettingsPage() {
   const user = await getUser();
@@ -14,5 +15,5 @@ export default async function SettingsPage() {
     throw new Error('Team not found');
   }
 
-  return <p>app goes here</p>
+  return <Dashboard />
 }
