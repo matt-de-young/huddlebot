@@ -25,11 +25,7 @@ function AppButton() {
   }
 
   return (
-    <Button asChild variant="outline">
-      <Link href="/app" className="flex items-center">
-        <span>App</span>
-      </Link>
-    </Button>
+    <Link href="/app" className="text-sm font-medium text-gray-700 hover:text-gray-900">App</Link>
   );
 }
 
