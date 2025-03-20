@@ -273,3 +273,44 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+  ---break---
+*/
+
+/* Skeleton loading animation */
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.skeleton-shine {
+  animation: shine 2s ease infinite;
+  background-size: 200% 100%;
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+}
+
+/* Dark mode adjustment for the shimmer effect */
+.dark .skeleton-shine {
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+}
+
+/* Add more contrast to skeleton loaders */
+.ui-skeleton {
+  @apply bg-muted-foreground/15;
+}
+
+.dark .ui-skeleton {
+  @apply bg-muted-foreground/25;
+}
