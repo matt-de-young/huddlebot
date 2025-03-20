@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Users, Settings, Shield, Activity, Menu } from 'lucide-react';
+import { Users, Settings as SettingsIcon, Shield, Activity, Menu, Link2 } from 'lucide-react';
 
 export default function SettingsLayout({
   children,
@@ -16,7 +16,8 @@ export default function SettingsLayout({
 
   const navItems = [
     { href: '/app/settings', icon: Users, label: 'Team' },
-    { href: '/app/settings/general', icon: Settings, label: 'General' },
+    { href: '/app/settings/general', icon: SettingsIcon, label: 'General' },
+    { href: '/app/settings/integrations', icon: Link2, label: 'Integrations' },
     { href: '/app/settings/activity', icon: Activity, label: 'Activity' },
     { href: '/app/settings/security', icon: Shield, label: 'Security' },
   ];
