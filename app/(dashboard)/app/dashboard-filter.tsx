@@ -6,11 +6,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { IssueCard } from "@/components/issue-card"
 import { PRCard } from "@/components/pr-card"
-import { WorkItemUnion } from "@/types/work-items"
+import type { WorkItem } from '@huddlekit/types';
 import { Summary } from "@/components/summary"
 
 interface DashboardFilterProps {
-  workItems: WorkItemUnion[]
+  workItems: WorkItem[]
   people: string[]
 }
 

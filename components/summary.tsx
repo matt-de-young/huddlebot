@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { WorkItemUnion } from "@/types/work-items"
-import { BarChart2, TrendingUp, AlertCircle, Clock } from "lucide-react"
+import type { WorkItem } from "@huddlekit/types"
+import { BarChart2, AlertCircle, Clock } from "lucide-react"
 
-export function Summary({ workItems, personFilter }: {workItems: WorkItemUnion[], personFilter: string}) {
+export function Summary({ workItems, personFilter }: {workItems: WorkItem[], personFilter: string}) {
   // Count statistics
   const totalIssues = workItems.filter(item => item.type === "issue").length
   const totalPRs = workItems.filter(item => item.type === "pr").length

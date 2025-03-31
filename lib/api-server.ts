@@ -1,7 +1,8 @@
-import { Issue, PullRequest } from "@/types/work-items"
+import type { Issue, PullRequest } from "@huddlekit/types"
 
 export async function fetchIssuesForTeam(teamId: number): Promise<Issue[]> {
 
+  console.debug(`fetching issues for team ${teamId}`)
   await new Promise(resolve => setTimeout(resolve, 1500));
 
   return [
@@ -75,6 +76,7 @@ export async function fetchIssuesForTeam(teamId: number): Promise<Issue[]> {
 
 export async function fetchPullRequestsForTeam(teamId: number): Promise<PullRequest[]> {
 
+  console.debug(`fetching PRs for team ${teamId}`)
   await new Promise(resolve => setTimeout(resolve, 500));
 
   return [

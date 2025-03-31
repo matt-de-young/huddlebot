@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CheckCircle2, AlertCircle, Clock, GitBranch, GitPullRequest } from "lucide-react"
-import { WorkPR, Reviewer } from "@/types/work-items"
+import type { WorkPR, Reviewer } from "@huddlekit/types"
 
 
 export function PRCard({ pr }: {pr: WorkPR}) {

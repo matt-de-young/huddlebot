@@ -1,10 +1,10 @@
-export interface User {
+export interface Person {
   name: string;
   avatar: string;
   initials: string;
 }
 
-export interface Reviewer extends User {
+export interface Reviewer extends Person {
   status: 'approved' | 'changes_requested' | 'requested';
 }
 
@@ -13,7 +13,7 @@ export interface Issue {
   title: string;
   status: string;
   lastUpdated: number;
-  assignee: User;
+  assignee: Person;
   priority: 'High' | 'Medium' | 'Low';
   labels: string[];
 }
@@ -24,13 +24,13 @@ export interface PullRequest {
   branch: string;
   status: string;
   lastUpdated: number;
-  author: User;
+  author: Person;
   reviewers: Reviewer[];
   comments: number;
   changes: string;
 }
 
-export interface WorkItem extends Issue {
+export interface WorkIssue extends Issue {
   type: "issue";
   key: string;
 }
@@ -40,4 +40,4 @@ export interface WorkPR extends PullRequest {
   key: string;
 }
 
-export type WorkItemUnion = WorkItem | WorkPR;
+export type WorkItem = WorkIssue | WorkPR;

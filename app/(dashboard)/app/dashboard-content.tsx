@@ -1,5 +1,5 @@
 import { fetchIssuesForTeam, fetchPullRequestsForTeam } from '@/lib/api-server';
-import { WorkItem, WorkPR, WorkItemUnion } from '@/types/work-items';
+import type { WorkIssue, WorkPR, WorkItem } from '@huddlekit/types';
 import { DashboardFilter } from './dashboard-filter';
 
 interface DashboardContentProps {
@@ -12,8 +12,8 @@ export async function DashboardContent({ teamId }: DashboardContentProps) {
   const pullRequests = await fetchPullRequestsForTeam(teamId);
 
   // Create work items array
-  const workItems: WorkItemUnion[] = [
-    ...issues.map((issue): WorkItem => ({
+  const workItems: WorkItem[] = [
+    ...issues.map((issue): WorkIssue => ({
       ...issue,
       type: 'issue',
       key: `issue-${issue.id}`,

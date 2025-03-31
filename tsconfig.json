@@ -26,6 +26,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@huddlekit/*": [
+        "./lib/huddlekit/src/*"
       ]
     }
   },
