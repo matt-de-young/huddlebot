@@ -1,4 +1,4 @@
-import type { Issue, PullRequest, Person } from "@huddlekit/types";
+import type { GithubIssue, GithubPullRequest, Issue, PullRequest } from "@huddlekit/types";
 
 export async function fetchGithubIssues(apiToken: string, owner: string, repo: string): Promise<Issue[]> {
   const url = `https://api.github.com/repos/${owner}/${repo}/issues?state=open`;
@@ -14,14 +14,14 @@ export async function fetchGithubIssues(apiToken: string, owner: string, repo: s
     throw new Error(`GitHub API request failed: ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data: GithubIssue[] = await response.json();
 
   return data
-    .filter((issue: any) => !issue.pull_request) // Filter out pull requests
-    .map((issue: any) => ({
+    .filter((issue) => !issue.pull_request) // Filter out pull requests
+    .map((issue) => ({
       id: issue.id,
       title: issue.title,
-      status: issue.state,
+      status: issue.state, // Ensure 'state' is part of GithubIssue
       lastUpdated: new Date(issue.updated_at).getTime(),
       assignee: issue.assignee
         ? {
@@ -29,7 +29,7 @@ export async function fetchGithubIssues(apiToken: string, owner: string, repo: s
             avatar: issue.assignee.avatar_url,
             initials: issue.assignee.login
               .split(" ")
-              .map((n: string) => n[0])
+              .map((n) => n[0])
               .join(""),
           }
         : {
@@ -38,7 +38,7 @@ export async function fetchGithubIssues(apiToken: string, owner: string, repo: s
             initials: "U",
           },
       priority: "Medium", // GitHub issues do not have a priority field, so we set a default value
-      labels: issue.labels ? issue.labels.map((label: any) => label.name) : [],
+      labels: issue.labels ? issue.labels.map((label) => label.name) : [],
     }));
 }
 
@@ -56,28 +56,28 @@ export async function fetchGithubPullRequests(apiToken: string, owner: string, r
     throw new Error(`GitHub API request failed: ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data: GithubPullRequest[] = await response.json();
 
-  return data.map((pr: any) => ({
+  return data.map((pr) => ({
     id: pr.id,
     title: pr.title,
     branch: pr.head.ref,
-    status: pr.state,
+    status: pr.state, // Ensure 'state' is part of GithubPullRequest
     lastUpdated: new Date(pr.updated_at).getTime(),
     author: {
       name: pr.user.login,
       avatar: pr.user.avatar_url,
       initials: pr.user.login
         .split(" ")
-        .map((n: string) => n[0])
+        .map((n) => n[0])
         .join(""),
     },
-    reviewers: pr.requested_reviewers.map((reviewer: any) => ({
+    reviewers: pr.requested_reviewers.map((reviewer) => ({
       name: reviewer.login,
       avatar: reviewer.avatar_url,
       initials: reviewer.login
         .split(" ")
-        .map((n: string) => n[0])
+        .map((n) => n[0])
         .join(""),
       status: "requested", // GitHub API does not provide review status in this endpoint
     })),

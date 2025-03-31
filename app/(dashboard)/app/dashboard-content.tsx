@@ -57,6 +57,7 @@ export async function DashboardContent({ teamId }: DashboardContentProps) {
     // Pass data to a client component for filtering
     return <DashboardFilter workItems={workItems} people={people} />;
   } catch (error) {
-    return <div className="text-red-500">{error.message || "An error occurred while fetching data."}</div>;
+    const errorMessage = error instanceof Error ? error.message : "An error occurred while fetching data.";
+    return <div className="text-red-500">{errorMessage}</div>;
   }
 }

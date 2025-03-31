@@ -1,7 +1,6 @@
 import type { Issue, PullRequest } from "@huddlekit/types";
-import { fetchLinearIssues } from "@huddlekit/integrations/linear";
 import { fetchGithubIssues, fetchGithubPullRequests } from "@huddlekit/integrations/github";
-import { getUser, getTeamForUser, getGithubApiTokenForTeam } from "@/lib/db/queries";
+import { getGithubApiTokenForTeam } from "@/lib/db/queries";
 
 export async function fetchIssuesForTeam(teamId: number): Promise<Issue[]> {
   console.debug(`fetching issues for team ${teamId}`);
