@@ -1,17 +1,26 @@
 import type { Issue, PullRequest } from "@huddlekit/types";
 import { fetchLinearIssues } from "@huddlekit/integrations/linear";
-import { fetchGithubPullRequests } from "./huddlekit/src/integrations/github";
+import { fetchGithubIssues, fetchGithubPullRequests } from "@huddlekit/integrations/github";
+import { getUser, getTeamForUser, getGithubApiTokenForTeam } from "@/lib/db/queries";
 
 export async function fetchIssuesForTeam(teamId: number): Promise<Issue[]> {
   console.debug(`fetching issues for team ${teamId}`);
-  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  return fetchLinearIssues();
+  const apiToken = await getGithubApiTokenForTeam(teamId);
+  if (!apiToken) {
+    throw new Error("GitHub API token not found for team");
+  }
+
+  return fetchGithubIssues(apiToken, "matt-de-young", "huddlebot");
 }
 
 export async function fetchPullRequestsForTeam(teamId: number): Promise<PullRequest[]> {
   console.debug(`fetching PRs for team ${teamId}`);
-  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  return fetchGithubPullRequests();
+  const apiToken = await getGithubApiTokenForTeam(teamId);
+  if (!apiToken) {
+    throw new Error("GitHub API token not found for team");
+  }
+
+  return fetchGithubPullRequests(apiToken, "matt-de-young", "huddlebot");
 }

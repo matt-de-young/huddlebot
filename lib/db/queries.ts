@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from "drizzle-orm";
 import { db } from "./drizzle";
-import { activityLogs, teamMembers, teams, users } from "./schema";
+import { activityLogs, teamMembers, teams, users, integrations } from "./schema";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth/session";
 
@@ -118,4 +118,16 @@ export async function getTeamForUser(userId: number) {
   });
 
   return result?.teamMembers[0]?.team || null;
+}
+
+export async function getGithubApiTokenForTeam(teamId: number): Promise<string | null> {
+  const integration = await db.query.integrations.findFirst({
+    where: eq(integrations.teamId, teamId),
+  });
+
+  if (integration && integration.provider === "github") {
+    return integration.apiKey;
+  }
+
+  return null;
 }

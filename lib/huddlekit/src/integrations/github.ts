@@ -1,88 +1,87 @@
-import type { PullRequest } from "@huddlekit/types";
+import type { Issue, PullRequest, Person } from "@huddlekit/types";
 
-export async function fetchGithubPullRequests(): Promise<PullRequest[]> {
-  await new Promise((resolve) => setTimeout(resolve, 500));
+export async function fetchGithubIssues(apiToken: string, owner: string, repo: string): Promise<Issue[]> {
+  const url = `https://api.github.com/repos/${owner}/${repo}/issues?state=open`;
 
-  return [
-    {
-      id: 101,
-      title: "Feature: User profile redesign",
-      branch: "feature/user-profile",
-      status: "Open",
-      lastUpdated: 1,
-      author: {
-        name: "Alex Johnson",
-        avatar: "/placeholder.svg?height=40&width=40",
-        initials: "AJ",
-      },
-      reviewers: [
-        {
-          name: "Sam Taylor",
-          avatar: "/placeholder.svg?height=40&width=40",
-          initials: "ST",
-          status: "approved",
-        },
-        {
-          name: "Jamie Smith",
-          avatar: "/placeholder.svg?height=40&width=40",
-          initials: "JS",
-          status: "requested",
-        },
-      ],
-      comments: 3,
-      changes: "+234 -56",
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${apiToken}`,
+      Accept: "application/vnd.github.v3+json",
     },
-    {
-      id: 102,
-      title: "Fix: Authentication token refresh",
-      branch: "fix/auth-refresh",
-      status: "Changes Requested",
-      lastUpdated: 3,
-      author: {
-        name: "Riley Brown",
-        avatar: "/placeholder.svg?height=40&width=40",
-        initials: "RB",
-      },
-      reviewers: [
-        {
-          name: "Casey Wilson",
-          avatar: "/placeholder.svg?height=40&width=40",
-          initials: "CW",
-          status: "changes_requested",
-        },
-      ],
-      comments: 5,
-      changes: "+45 -12",
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API request failed: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  return data
+    .filter((issue: any) => !issue.pull_request) // Filter out pull requests
+    .map((issue: any) => ({
+      id: issue.id,
+      title: issue.title,
+      status: issue.state,
+      lastUpdated: new Date(issue.updated_at).getTime(),
+      assignee: issue.assignee
+        ? {
+            name: issue.assignee.login,
+            avatar: issue.assignee.avatar_url,
+            initials: issue.assignee.login
+              .split(" ")
+              .map((n: string) => n[0])
+              .join(""),
+          }
+        : {
+            name: "Unassigned",
+            avatar: "",
+            initials: "U",
+          },
+      priority: "Medium", // GitHub issues do not have a priority field, so we set a default value
+      labels: issue.labels ? issue.labels.map((label: any) => label.name) : [],
+    }));
+}
+
+export async function fetchGithubPullRequests(apiToken: string, owner: string, repo: string): Promise<PullRequest[]> {
+  const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=open`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${apiToken}`,
+      Accept: "application/vnd.github.v3+json",
     },
-    {
-      id: 103,
-      title: "Chore: Update dependencies",
-      branch: "chore/update-deps",
-      status: "Open",
-      lastUpdated: 5,
-      author: {
-        name: "Sam Taylor",
-        avatar: "/placeholder.svg?height=40&width=40",
-        initials: "ST",
-      },
-      reviewers: [],
-      comments: 0,
-      changes: "+1245 -1190",
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API request failed: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  return data.map((pr: any) => ({
+    id: pr.id,
+    title: pr.title,
+    branch: pr.head.ref,
+    status: pr.state,
+    lastUpdated: new Date(pr.updated_at).getTime(),
+    author: {
+      name: pr.user.login,
+      avatar: pr.user.avatar_url,
+      initials: pr.user.login
+        .split(" ")
+        .map((n: string) => n[0])
+        .join(""),
     },
-    {
-      id: 104,
-      title: "Feature: Add analytics dashboard",
-      branch: "feature/analytics",
-      status: "Draft",
-      lastUpdated: 2,
-      author: {
-        name: "Casey Wilson",
-        avatar: "/placeholder.svg?height=40&width=40",
-        initials: "CW",
-      },
-      reviewers: [],
-      comments: 2,
-      changes: "+567 -12",
-    },
-  ];
+    reviewers: pr.requested_reviewers.map((reviewer: any) => ({
+      name: reviewer.login,
+      avatar: reviewer.avatar_url,
+      initials: reviewer.login
+        .split(" ")
+        .map((n: string) => n[0])
+        .join(""),
+      status: "requested", // GitHub API does not provide review status in this endpoint
+    })),
+    comments: pr.comments,
+    changes: `+${pr.additions} -${pr.deletions}`,
+  }));
 }
