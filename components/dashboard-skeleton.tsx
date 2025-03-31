@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/skeleton"
-import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 export function DashboardSkeleton() {
   return (
@@ -29,19 +29,21 @@ export function DashboardSkeleton() {
 
       {/* Activity cards grid skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array(6).fill(0).map((_, index) => (
-          <Card key={index} className="overflow-hidden relative">
-            <div className="p-6 space-y-3">
-              <Skeleton className="h-6 w-full ui-skeleton" />
-              <Skeleton className="h-4 w-3/4 ui-skeleton" />
-              <Skeleton className="h-16 w-full ui-skeleton" />
-              <Skeleton className="h-4 w-24 ui-skeleton" />
-            </div>
-            {/* Add a loading indicator overlay */}
-            <div className="absolute inset-0 skeleton-shine" />
-          </Card>
-        ))}
+        {Array(6)
+          .fill(0)
+          .map((_, index) => (
+            <Card key={index} className="overflow-hidden relative">
+              <div className="p-6 space-y-3">
+                <Skeleton className="h-6 w-full ui-skeleton" />
+                <Skeleton className="h-4 w-3/4 ui-skeleton" />
+                <Skeleton className="h-16 w-full ui-skeleton" />
+                <Skeleton className="h-4 w-24 ui-skeleton" />
+              </div>
+              {/* Add a loading indicator overlay */}
+              <div className="absolute inset-0 skeleton-shine" />
+            </Card>
+          ))}
       </div>
     </div>
-  )
+  );
 }

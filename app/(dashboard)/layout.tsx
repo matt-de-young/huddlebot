@@ -1,31 +1,33 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { use, useState, Suspense } from 'react';
-import { Button } from '@/components/ui/button';
-import { CircleIcon, Settings, LogOut } from 'lucide-react';
+import Link from "next/link";
+import { use, useState, Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import { CircleIcon, Settings, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '@/lib/auth';
-import { signOut } from '@/app/(login)/actions';
-import { useRouter, usePathname } from 'next/navigation';
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUser } from "@/lib/auth";
+import { signOut } from "@/app/(login)/actions";
+import { useRouter, usePathname } from "next/navigation";
 
 function AppButton() {
   const { userPromise } = useUser();
   const user = use(userPromise);
   const pathname = usePathname();
 
-  if (!user || pathname.includes('/app')) {
+  if (!user || pathname.includes("/app")) {
     return <></>;
   }
 
   return (
-    <Link href="/app" className="text-sm font-medium text-gray-700 hover:text-gray-900">App</Link>
+    <Link href="/app" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+      App
+    </Link>
   );
 }
 
@@ -38,22 +40,16 @@ function UserMenu() {
   async function handleSignOut() {
     await signOut();
     router.refresh();
-    router.push('/');
+    router.push("/");
   }
 
   if (!user) {
     return (
       <>
-        <Link
-          href="/pricing"
-          className="text-sm font-medium text-gray-700 hover:text-gray-900"
-        >
+        <Link href="/pricing" className="text-sm font-medium text-gray-700 hover:text-gray-900">
           Pricing
         </Link>
-        <Button
-          asChild
-          className="bg-black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full"
-        >
+        <Button asChild className="bg-black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full">
           <Link href="/sign-up">Sign Up</Link>
         </Button>
       </>
@@ -64,12 +60,12 @@ function UserMenu() {
     <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger>
         <Avatar className="cursor-pointer size-9">
-          <AvatarImage alt={user.name || ''} />
+          <AvatarImage alt={user.name || ""} />
           <AvatarFallback>
             {user.email
-              .split(' ')
+              .split(" ")
               .map((n) => n[0])
-              .join('')}
+              .join("")}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

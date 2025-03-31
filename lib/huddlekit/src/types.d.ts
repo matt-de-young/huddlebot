@@ -5,7 +5,7 @@ export interface Person {
 }
 
 export interface Reviewer extends Person {
-  status: 'approved' | 'changes_requested' | 'requested';
+  status: "approved" | "changes_requested" | "requested";
 }
 
 export interface Issue {
@@ -14,7 +14,7 @@ export interface Issue {
   status: string;
   lastUpdated: number;
   assignee: Person;
-  priority: 'High' | 'Medium' | 'Low';
+  priority: "High" | "Medium" | "Low";
   labels: string[];
 }
 

@@ -1,6 +1,6 @@
-import { fetchIssuesForTeam, fetchPullRequestsForTeam } from '@/lib/api-server';
-import type { WorkIssue, WorkPR, WorkItem } from '@huddlekit/types';
-import { DashboardFilter } from './dashboard-filter';
+import { fetchIssuesForTeam, fetchPullRequestsForTeam } from "@/lib/api-server";
+import type { WorkIssue, WorkPR, WorkItem } from "@huddlekit/types";
+import { DashboardFilter } from "./dashboard-filter";
 
 interface DashboardContentProps {
   teamId: number;
@@ -13,35 +13,39 @@ export async function DashboardContent({ teamId }: DashboardContentProps) {
 
   // Create work items array
   const workItems: WorkItem[] = [
-    ...issues.map((issue): WorkIssue => ({
-      ...issue,
-      type: 'issue',
-      key: `issue-${issue.id}`,
-    })),
-    ...pullRequests.map((pr): WorkPR => ({
-      ...pr,
-      type: 'pr',
-      key: `pr-${pr.id}`,
-    })),
+    ...issues.map(
+      (issue): WorkIssue => ({
+        ...issue,
+        type: "issue",
+        key: `issue-${issue.id}`,
+      }),
+    ),
+    ...pullRequests.map(
+      (pr): WorkPR => ({
+        ...pr,
+        type: "pr",
+        key: `pr-${pr.id}`,
+      }),
+    ),
   ];
 
   // Extract all unique people (for the filter)
   const peopleSet = new Set<string>();
 
   // Add all issue assignees
-  issues.forEach(issue => {
+  issues.forEach((issue) => {
     if (issue.assignee?.name) {
       peopleSet.add(issue.assignee.name);
     }
   });
 
   // Add all PR authors and reviewers
-  pullRequests.forEach(pr => {
+  pullRequests.forEach((pr) => {
     if (pr.author?.name) {
       peopleSet.add(pr.author.name);
     }
 
-    pr.reviewers?.forEach(reviewer => {
+    pr.reviewers?.forEach((reviewer) => {
       if (reviewer.name) {
         peopleSet.add(reviewer.name);
       }

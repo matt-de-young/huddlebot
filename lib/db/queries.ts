@@ -1,21 +1,17 @@
-import { desc, and, eq, isNull } from 'drizzle-orm';
-import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
-import { cookies } from 'next/headers';
-import { verifyToken } from '@/lib/auth/session';
+import { desc, and, eq, isNull } from "drizzle-orm";
+import { db } from "./drizzle";
+import { activityLogs, teamMembers, teams, users } from "./schema";
+import { cookies } from "next/headers";
+import { verifyToken } from "@/lib/auth/session";
 
 export async function getUser() {
-  const sessionCookie = (await cookies()).get('session');
+  const sessionCookie = (await cookies()).get("session");
   if (!sessionCookie || !sessionCookie.value) {
     return null;
   }
 
   const sessionData = await verifyToken(sessionCookie.value);
-  if (
-    !sessionData ||
-    !sessionData.user ||
-    typeof sessionData.user.id !== 'number'
-  ) {
+  if (!sessionData || !sessionData.user || typeof sessionData.user.id !== "number") {
     return null;
   }
 
@@ -37,11 +33,7 @@ export async function getUser() {
 }
 
 export async function getTeamByStripeCustomerId(customerId: string) {
-  const result = await db
-    .select()
-    .from(teams)
-    .where(eq(teams.stripeCustomerId, customerId))
-    .limit(1);
+  const result = await db.select().from(teams).where(eq(teams.stripeCustomerId, customerId)).limit(1);
 
   return result.length > 0 ? result[0] : null;
 }
@@ -53,7 +45,7 @@ export async function updateTeamSubscription(
     stripeProductId: string | null;
     planName: string | null;
     subscriptionStatus: string;
-  }
+  },
 ) {
   await db
     .update(teams)
@@ -81,7 +73,7 @@ export async function getUserWithTeam(userId: number) {
 export async function getActivityLogs() {
   const user = await getUser();
   if (!user) {
-    throw new Error('User not authenticated');
+    throw new Error("User not authenticated");
   }
 
   return await db

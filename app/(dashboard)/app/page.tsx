@@ -1,20 +1,20 @@
-import { redirect } from 'next/navigation';
-import { getTeamForUser, getUser } from '@/lib/db/queries';
-import { Suspense } from 'react';
-import { DashboardContent } from './dashboard-content';
-import { DashboardSkeleton } from '@/components/dashboard-skeleton';
+import { redirect } from "next/navigation";
+import { getTeamForUser, getUser } from "@/lib/db/queries";
+import { Suspense } from "react";
+import { DashboardContent } from "./dashboard-content";
+import { DashboardSkeleton } from "@/components/dashboard-skeleton";
 
 export default async function SettingsPage() {
   const user = await getUser();
 
   if (!user) {
-    redirect('/sign-in');
+    redirect("/sign-in");
   }
 
   const teamData = await getTeamForUser(user.id);
 
   if (!teamData) {
-    throw new Error('Team not found');
+    throw new Error("Team not found");
   }
 
   return (

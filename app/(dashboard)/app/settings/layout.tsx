@@ -1,25 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Users, Settings as SettingsIcon, Shield, Activity, Menu, Link2 } from 'lucide-react';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Users, Settings as SettingsIcon, Shield, Activity, Menu, Link2 } from "lucide-react";
 
-export default function SettingsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItems = [
-    { href: '/app/settings', icon: Users, label: 'Team' },
-    { href: '/app/settings/general', icon: SettingsIcon, label: 'General' },
-    { href: '/app/settings/integrations', icon: Link2, label: 'Integrations' },
-    { href: '/app/settings/activity', icon: Activity, label: 'Activity' },
-    { href: '/app/settings/security', icon: Shield, label: 'Security' },
+    { href: "/app/settings", icon: Users, label: "Team" },
+    { href: "/app/settings/general", icon: SettingsIcon, label: "General" },
+    { href: "/app/settings/integrations", icon: Link2, label: "Integrations" },
+    { href: "/app/settings/activity", icon: Activity, label: "Activity" },
+    { href: "/app/settings/security", icon: Shield, label: "Security" },
   ];
 
   return (
@@ -29,11 +25,7 @@ export default function SettingsLayout({
         <div className="flex items-center">
           <span className="font-medium">Settings</span>
         </div>
-        <Button
-          className="-mr-3"
-          variant="ghost"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
+        <Button className="-mr-3" variant="ghost" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle sidebar</span>
         </Button>
@@ -43,19 +35,17 @@ export default function SettingsLayout({
         {/* Sidebar */}
         <aside
           className={`w-64 bg-white lg:bg-gray-50 border-r border-gray-200 lg:block ${
-            isSidebarOpen ? 'block' : 'hidden'
+            isSidebarOpen ? "block" : "hidden"
           } lg:relative absolute inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <nav className="h-full overflow-y-auto p-4">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} passHref>
                 <Button
-                  variant={pathname === item.href ? 'secondary' : 'ghost'}
-                  className={`shadow-none my-1 w-full justify-start ${
-                    pathname === item.href ? 'bg-gray-100' : ''
-                  }`}
+                  variant={pathname === item.href ? "secondary" : "ghost"}
+                  className={`shadow-none my-1 w-full justify-start ${pathname === item.href ? "bg-gray-100" : ""}`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <item.icon className="mr-2 h-4 w-4" />

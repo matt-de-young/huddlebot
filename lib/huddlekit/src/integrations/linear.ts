@@ -1,8 +1,7 @@
-import type { Issue } from "@huddlekit/types"
+import type { Issue } from "@huddlekit/types";
 
 export async function fetchLinearIssues(): Promise<Issue[]> {
-
-  await new Promise(resolve => setTimeout(resolve, 250));
+  await new Promise((resolve) => setTimeout(resolve, 250));
 
   return [
     {
@@ -70,5 +69,5 @@ export async function fetchLinearIssues(): Promise<Issue[]> {
       priority: "Low",
       labels: ["docs"],
     },
-  ]
+  ];
 }

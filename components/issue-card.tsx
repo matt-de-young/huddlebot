@@ -1,10 +1,10 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Clock } from "lucide-react"
-import type { WorkIssue } from "@huddlekit/types"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Clock } from "lucide-react";
+import type { WorkIssue } from "@huddlekit/types";
 
-export function IssueCard({ issue }: {issue: WorkIssue}) {
+export function IssueCard({ issue }: { issue: WorkIssue }) {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="pb-2">
@@ -46,5 +46,5 @@ export function IssueCard({ issue }: {issue: WorkIssue}) {
             : `Updated ${issue.lastUpdated} days ago`}
       </CardFooter>
     </Card>
-  )
+  );
 }

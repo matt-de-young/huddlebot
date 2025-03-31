@@ -1,8 +1,7 @@
-import type { PullRequest } from "@huddlekit/types"
+import type { PullRequest } from "@huddlekit/types";
 
 export async function fetchGithubPullRequests(): Promise<PullRequest[]> {
-
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return [
     {
@@ -85,5 +84,5 @@ export async function fetchGithubPullRequests(): Promise<PullRequest[]> {
       comments: 2,
       changes: "+567 -12",
     },
-  ]
+  ];
 }

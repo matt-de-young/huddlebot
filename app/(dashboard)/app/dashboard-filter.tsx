@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { GitPullRequest, BugIcon as Issue, XIcon } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { IssueCard } from "@/components/issue-card"
-import { PRCard } from "@/components/pr-card"
-import type { WorkItem } from '@huddlekit/types';
-import { Summary } from "@/components/summary"
+import { useState, useMemo } from "react";
+import { GitPullRequest, BugIcon as Issue, XIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { IssueCard } from "@/components/issue-card";
+import { PRCard } from "@/components/pr-card";
+import type { WorkItem } from "@huddlekit/types";
+import { Summary } from "@/components/summary";
 
 interface DashboardFilterProps {
-  workItems: WorkItem[]
-  people: string[]
+  workItems: WorkItem[];
+  people: string[];
 }
 
 export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
-  const [personFilter, setPersonFilter] = useState<string>("")
+  const [personFilter, setPersonFilter] = useState<string>("");
 
   // Client-side filtering based on selected person
   const filteredWorkItems = useMemo(() => {
     if (!personFilter) {
-      return workItems
+      return workItems;
     }
 
-    return workItems.filter(item => {
+    return workItems.filter((item) => {
       if (item.type === "issue") {
-        return item.assignee.name === personFilter
+        return item.assignee.name === personFilter;
       } else {
         // For PRs, check both author and reviewers
         if (item.author.name === personFilter) {
-          return true
+          return true;
         }
 
-        return item.reviewers.some(reviewer => reviewer.name === personFilter)
+        return item.reviewers.some((reviewer) => reviewer.name === personFilter);
       }
-    })
-  }, [personFilter, workItems])
+    });
+  }, [personFilter, workItems]);
 
   return (
     <>
@@ -44,28 +44,22 @@ export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Select
-              value={personFilter}
-              onValueChange={(value) => setPersonFilter(value === "all" ? "" : value)}
-            >
+            <Select value={personFilter} onValueChange={(value) => setPersonFilter(value === "all" ? "" : value)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="All team members" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All team members</SelectItem>
-                {people.map(person => (
-                  <SelectItem key={person} value={person}>{person}</SelectItem>
+                {people.map((person) => (
+                  <SelectItem key={person} value={person}>
+                    {person}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
             {personFilter && (
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setPersonFilter("")}
-                title="Clear filter"
-              >
+              <Button variant="outline" size="icon" onClick={() => setPersonFilter("")} title="Clear filter">
                 <XIcon className="h-4 w-4" />
               </Button>
             )}
@@ -75,14 +69,12 @@ export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
             <div className="flex items-center gap-1">
               <Issue className="h-4 w-4 text-blue-500" />
               <span className="text-sm">
-                Issues: {filteredWorkItems.filter(item => item.type === "issue").length}
+                Issues: {filteredWorkItems.filter((item) => item.type === "issue").length}
               </span>
             </div>
             <div className="flex items-center gap-1 ml-4">
               <GitPullRequest className="h-4 w-4 text-purple-500" />
-              <span className="text-sm">
-                PRs: {filteredWorkItems.filter(item => item.type === "pr").length}
-              </span>
+              <span className="text-sm">PRs: {filteredWorkItems.filter((item) => item.type === "pr").length}</span>
             </div>
           </div>
         </div>
@@ -98,13 +90,11 @@ export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredWorkItems.map((item) => (
-            item.type === "issue"
-              ? <IssueCard key={item.key} issue={item} />
-              : <PRCard key={item.key} pr={item} />
-          ))}
+          {filteredWorkItems.map((item) =>
+            item.type === "issue" ? <IssueCard key={item.key} issue={item} /> : <PRCard key={item.key} pr={item} />,
+          )}
         </div>
       )}
     </>
-  )
+  );
 }

@@ -1,43 +1,42 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CheckCircle2, AlertCircle, Clock, GitBranch, GitPullRequest } from "lucide-react"
-import type { WorkPR, Reviewer } from "@huddlekit/types"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CheckCircle2, AlertCircle, Clock, GitBranch, GitPullRequest } from "lucide-react";
+import type { WorkPR, Reviewer } from "@huddlekit/types";
 
-
-export function PRCard({ pr }: {pr: WorkPR}) {
+export function PRCard({ pr }: { pr: WorkPR }) {
   // Get status color
   const getStatusColor = (status: string) => {
     switch (status) {
       case "In Progress":
-        return "text-blue-500"
+        return "text-blue-500";
       case "In Review":
-        return "text-purple-500"
+        return "text-purple-500";
       case "Blocked":
-        return "text-red-500"
+        return "text-red-500";
       case "Open":
-        return "text-green-500"
+        return "text-green-500";
       case "Changes Requested":
-        return "text-amber-500"
+        return "text-amber-500";
       case "Draft":
-        return "text-slate-500"
+        return "text-slate-500";
       default:
-        return "text-gray-500"
+        return "text-gray-500";
     }
-  }
+  };
 
   // Get reviewer status icon
   const getReviewerStatusIcon = (status: string) => {
     switch (status) {
       case "approved":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
       case "changes_requested":
-        return <AlertCircle className="h-4 w-4 text-red-500" />
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
       case "requested":
-        return <Clock className="h-4 w-4 text-amber-500" />
+        return <Clock className="h-4 w-4 text-amber-500" />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <Card className="overflow-hidden">
@@ -92,5 +91,5 @@ export function PRCard({ pr }: {pr: WorkPR}) {
             : `Updated ${pr.lastUpdated} days ago`}
       </CardFooter>
     </Card>
-  )
+  );
 }

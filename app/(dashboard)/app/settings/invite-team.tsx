@@ -1,20 +1,14 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { Loader2, PlusCircle } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { use, useActionState } from 'react';
-import { inviteTeamMember } from '@/app/(login)/actions';
-import { useUser } from '@/lib/auth';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Loader2, PlusCircle } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { use, useActionState } from "react";
+import { inviteTeamMember } from "@/app/(login)/actions";
+import { useUser } from "@/lib/auth";
 
 type ActionState = {
   error?: string;
@@ -24,11 +18,11 @@ type ActionState = {
 export function InviteTeamMember() {
   const { userPromise } = useUser();
   const user = use(userPromise);
-  const isOwner = user?.role === 'owner';
-  const [inviteState, inviteAction, isInvitePending] = useActionState<
-    ActionState,
-    FormData
-  >(inviteTeamMember, { error: '', success: '' });
+  const isOwner = user?.role === "owner";
+  const [inviteState, inviteAction, isInvitePending] = useActionState<ActionState, FormData>(inviteTeamMember, {
+    error: "",
+    success: "",
+  });
 
   return (
     <Card>
@@ -39,23 +33,11 @@ export function InviteTeamMember() {
         <form action={inviteAction} className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter email"
-              required
-              disabled={!isOwner}
-            />
+            <Input id="email" name="email" type="email" placeholder="Enter email" required disabled={!isOwner} />
           </div>
           <div>
             <Label>Role</Label>
-            <RadioGroup
-              defaultValue="member"
-              name="role"
-              className="flex space-x-4"
-              disabled={!isOwner}
-            >
+            <RadioGroup defaultValue="member" name="role" className="flex space-x-4" disabled={!isOwner}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="member" id="member" />
                 <Label htmlFor="member">Member</Label>
@@ -66,12 +48,8 @@ export function InviteTeamMember() {
               </div>
             </RadioGroup>
           </div>
-          {inviteState?.error && (
-            <p className="text-red-500">{inviteState.error}</p>
-          )}
-          {inviteState?.success && (
-            <p className="text-green-500">{inviteState.success}</p>
-          )}
+          {inviteState?.error && <p className="text-red-500">{inviteState.error}</p>}
+          {inviteState?.success && <p className="text-green-500">{inviteState.success}</p>}
           <Button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white"
@@ -93,9 +71,7 @@ export function InviteTeamMember() {
       </CardContent>
       {!isOwner && (
         <CardFooter>
-          <p className="text-sm text-muted-foreground">
-            You must be a team owner to invite new members.
-          </p>
+          <p className="text-sm text-muted-foreground">You must be a team owner to invite new members.</p>
         </CardFooter>
       )}
     </Card>
