@@ -6,13 +6,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form to report a bug or problem with the Next.js starter kit for Paddle Billing.
+        Use this form to report a bug or problem with HuddleBot.
 
         Remember to remove sensitive information from screenshots, videos, or code samples before submitting.
 
-        **Do not create issues for potential security vulnerabilities.** Please see the [Paddle Vulnerability Disclosure Policy](https://www.paddle.com/vulnerability-disclosure-policy) and report any vulnerabilities [using our form](https://vdp.paddle.com/p/Report-a-Vulnerability).
-
-        Thanks for helping to make the Paddle platform better for everyone!
+        **Do not create issues for potential security vulnerabilities.** Please see the [Vulnerability Disclosure Policy](https://www.huddlebot.vercel.app) and report any vulnerabilities [using our form](https://huddlebot.vercel.app/).
   - type: textarea
     id: description
     attributes:

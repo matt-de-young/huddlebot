@@ -6,12 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form to send us suggestions for improvements to the Next.js starter kit for Paddle Billing.
+        Use this form to send us suggestions for improvements to Huddlebot.
 
-        For general feedback about the Paddle API or developer platform, contact our DX team directly
-        at [team-dx@paddle.com](mailto:team-dx@paddle.com).
-
-        Thanks for helping to make the Paddle platform better for everyone!
+        Thanks for helping to make the daily huddles better for everyone!
   - type: textarea
     id: request
     attributes:
