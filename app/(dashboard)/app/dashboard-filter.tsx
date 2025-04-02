@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { GitPullRequest, BugIcon as Issue, XIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { IssueCard } from "@/components/issue-card";
 import { PRCard } from "@/components/pr-card";
 import type { WorkItem } from "@huddlekit/types";
 import { Summary } from "@/components/summary";
+import { DashboardSkeleton } from "@/components/dashboard-skeleton";
 
 interface DashboardFilterProps {
   workItems: WorkItem[];
@@ -16,6 +17,8 @@ interface DashboardFilterProps {
 
 export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
   const [personFilter, setPersonFilter] = useState<string>("");
+  const [summary, setSummary] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Client-side filtering based on selected person
   const filteredWorkItems = useMemo(() => {
@@ -36,6 +39,34 @@ export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
       }
     });
   }, [personFilter, workItems]);
+
+  useEffect(() => {
+    async function fetchSummary() {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/summarize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ workItems: filteredWorkItems }),
+        });
+
+        const data = await response.json();
+        setSummary(data.summary);
+      } catch (error) {
+        console.error("Error fetching summary:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSummary();
+  }, [filteredWorkItems]);
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <>
@@ -80,7 +111,7 @@ export function DashboardFilter({ workItems, people }: DashboardFilterProps) {
         </div>
       </div>
 
-      <Summary workItems={filteredWorkItems} personFilter={personFilter} />
+      <Summary summary={summary} loading={loading} />
 
       <h2 className="text-2xl font-bold mb-6">Activity</h2>
 
