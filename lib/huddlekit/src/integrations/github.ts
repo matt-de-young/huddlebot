@@ -1,68 +1,70 @@
-import type { GithubIssue, GithubPullRequest, Issue, PullRequest } from "@huddlekit/types";
+import type { Issue, PullRequest } from "@huddlekit/types";
 
-export async function fetchGithubIssues(apiToken: string, owner: string, repo: string): Promise<Issue[]> {
-  const url = `https://api.github.com/repos/${owner}/${repo}/issues?state=open`;
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `token ${apiToken}`,
-      Accept: "application/vnd.github.v3+json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`GitHub API request failed: ${response.statusText}`);
-  }
-
-  const data: GithubIssue[] = await response.json();
-
-  return data
-    .filter((issue) => !issue.pull_request) // Filter out pull requests
-    .map((issue) => ({
-      id: issue.id,
-      title: issue.title,
-      status: issue.state, // Ensure 'state' is part of GithubIssue
-      lastUpdated: new Date(issue.updated_at).getTime(),
-      assignee: issue.assignee
-        ? {
-            name: issue.assignee.login,
-            avatar: issue.assignee.avatar_url,
-            initials: issue.assignee.login
-              .split(" ")
-              .map((n) => n[0])
-              .join(""),
-          }
-        : {
-            name: "Unassigned",
-            avatar: "",
-            initials: "U",
-          },
-      priority: "Medium", // GitHub issues do not have a priority field, so we set a default value
-      labels: issue.labels ? issue.labels.map((label) => label.name) : [],
-    }));
+export interface GithubUser {
+  login: string;
+  avatar_url: string;
 }
 
-export async function fetchGithubPullRequests(apiToken: string, owner: string, repo: string): Promise<PullRequest[]> {
-  const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=open`;
+export interface GithubLabel {
+  name: string;
+}
 
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `token ${apiToken}`,
-      Accept: "application/vnd.github.v3+json",
-    },
-  });
+export interface GithubIssue {
+  id: number;
+  title: string;
+  updated_at: string;
+  state: string;
+  assignee: GithubUser | null;
+  labels: GithubLabel[];
+  pull_request?: object; // Optional field to indicate if the issue is a pull request
+}
 
-  if (!response.ok) {
-    throw new Error(`GitHub API request failed: ${response.statusText}`);
-  }
+export interface GithubPullRequest {
+  id: number;
+  title: string;
+  updated_at: string;
+  head: {
+    ref: string;
+  };
+  state: string;
+  user: GithubUser;
+  requested_reviewers: GithubUser[];
+  additions: number;
+  deletions: number;
+  comments: number;
+}
 
-  const data: GithubPullRequest[] = await response.json();
+function mapGithubIssueToIssue(issue: GithubIssue): Issue {
+  return {
+    id: issue.id,
+    title: issue.title,
+    status: issue.state,
+    lastUpdated: new Date(issue.updated_at).getTime(),
+    assignee: issue.assignee
+      ? {
+          name: issue.assignee.login,
+          avatar: issue.assignee.avatar_url,
+          initials: issue.assignee.login
+            .split(" ")
+            .map((n) => n[0])
+            .join(""),
+        }
+      : {
+          name: "Unassigned",
+          avatar: "",
+          initials: "U",
+        },
+    priority: "Medium", // GitHub issues do not have a priority field, so we set a default value
+    labels: issue.labels ? issue.labels.map((label) => label.name) : [],
+  };
+}
 
-  return data.map((pr) => ({
+function mapGithubPullRequestToPullRequest(pr: GithubPullRequest): PullRequest {
+  return {
     id: pr.id,
     title: pr.title,
     branch: pr.head.ref,
-    status: pr.state, // Ensure 'state' is part of GithubPullRequest
+    status: pr.state,
     lastUpdated: new Date(pr.updated_at).getTime(),
     author: {
       name: pr.user.login,
@@ -83,5 +85,45 @@ export async function fetchGithubPullRequests(apiToken: string, owner: string, r
     })),
     comments: pr.comments,
     changes: `+${pr.additions} -${pr.deletions}`,
-  }));
+  };
+}
+
+export async function fetchGithubIssues(apiToken: string, owner: string, repo: string): Promise<Issue[]> {
+  const url = `https://api.github.com/repos/${owner}/${repo}/issues?state=open`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${apiToken}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API request failed: ${response.statusText}`);
+  }
+
+  const data: GithubIssue[] = await response.json();
+
+  return data
+    .filter((issue) => !issue.pull_request) // Filter out pull requests
+    .map(mapGithubIssueToIssue);
+}
+
+export async function fetchGithubPullRequests(apiToken: string, owner: string, repo: string): Promise<PullRequest[]> {
+  const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=open`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${apiToken}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API request failed: ${response.statusText}`);
+  }
+
+  const data: GithubPullRequest[] = await response.json();
+
+  return data.map(mapGithubPullRequestToPullRequest);
 }

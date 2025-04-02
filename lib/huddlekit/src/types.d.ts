@@ -41,33 +41,3 @@ export interface WorkPR extends PullRequest {
 }
 
 export type WorkItem = WorkIssue | WorkPR;
-
-// GitHub-specific types
-export interface GithubUser extends Person {
-  login: string;
-  avatar_url: string;
-}
-
-export interface GithubLabel {
-  name: string;
-}
-
-export interface GithubIssue extends Issue {
-  updated_at: string;
-  state: string;
-  assignee: GithubUser | null;
-  labels: GithubLabel[];
-  pull_request?: object; // Optional field to indicate if the issue is a pull request
-}
-
-export interface GithubPullRequest extends PullRequest {
-  updated_at: string;
-  head: {
-    ref: string;
-  };
-  state: string;
-  user: GithubUser;
-  requested_reviewers: GithubUser[];
-  additions: number;
-  deletions: number;
-}
