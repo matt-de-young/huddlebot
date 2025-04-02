@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const { workItems } = await req.json();
-    console.log("Received workItems:", workItems);
 
     if (!workItems || !Array.isArray(workItems)) {
       console.error("Invalid request body:", workItems);
@@ -22,18 +21,10 @@ export async function POST(req: NextRequest) {
     const issues = workItems.filter((item: WorkItem) => item.type === "issue");
     const prs = workItems.filter((item: WorkItem) => item.type === "pr");
 
-    console.log("Filtered issues:", issues);
-    console.log("Filtered PRs:", prs);
-
     const issuesSummary = await summarizeIssues(issues);
     const prsSummary = await summarizePullRequests(prs);
 
-    console.log("Issues summary:", issuesSummary);
-    console.log("PRs summary:", prsSummary);
-
     const finalSummary = await summarizeText([issuesSummary, prsSummary]);
-
-    console.log("Final summary:", finalSummary);
 
     return NextResponse.json({ summary: finalSummary }, { status: 200 });
   } catch (error: unknown) {
